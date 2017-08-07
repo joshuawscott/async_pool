@@ -37,8 +37,7 @@ defmodule Producer do
   # have some sort of a recursive function here.
   def handle_cast(:produce, state) do
     # get some data
-    AsyncPool.add_task(data)
-    GenServer.cast
+    AsyncPool.add_task(state.async_pool, data)
     {:noreply, state}
   end
 
@@ -68,7 +67,7 @@ defmodule Producer do
     data = get_data()
 
     # Send to the async_pool
-    AsyncPool.add_task(data)
+    AsyncPool.add_task(async_pool, data)
 
     # Check if we have any pending responses in the mailbox
     receive do
